@@ -72,7 +72,12 @@ handle_call({join_service, _ServiceName,WebSocketId, SessionId}, _From, State) -
 %%--------------------------------------------------------------------
 handle_call({terminate_service, WebSocketId, _SessionId}, _From, State) ->
     #class{prof=Prof, students=Students} = State,
-    {reply, ok, #class{prof=Prof, students=dict:erase(WebSocketId,Students)}};
+    case Prof =:= WebSocketId of
+	true ->
+	    {reply, ok, #class{prof=undefined, students=Students}};
+	false ->
+	    {reply, ok, #class{prof=Prof, students=dict:erase(WebSocketId,Students)}}
+    end;
 %%--------------------------------------------------------------------
 
 handle_call(_Request, _From, State) ->
