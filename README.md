@@ -2,9 +2,9 @@ draw is a demo to illustrate websocket protocole
 ================================================
 
 open whiteboard is a drawing websocket javascript application,
-you can find more information on given link. 
+you can find more information on the given link. 
 
-    <https://developer.mozilla.org/fr/demosdetail/open-whiteboard>
+    https://developer.mozilla.org/fr/demosdetail/open-whiteboard
 
 
 Quickstart
