@@ -3,7 +3,7 @@
 %%% @copyright (C) 2012, mihawk
 %%% @doc
 %%%
-%%%        draw_protocol is an example to show how to
+%%%        draw_protocol is a demo to show how to
 %%%        implement websocket service for realtime update
 %%%        with the ChicagoBoss MVC Web Framwork,
 %%%        draw_protocol is the backend server for
@@ -55,13 +55,13 @@ init([]) ->
 %%--------------------------------------------------------------------
 %% to handle a connection to your service
 %%--------------------------------------------------------------------
-handle_call({join_service, _A,B,C}, _From, State) ->
-    #class{prof=V, students=S} = State,
-    NewState=case V of 
+handle_call({join_service, _ServiceName,WebSocketId, SessionId}, _From, State) ->
+    #class{prof=Prof, students=Students} = State,
+    NewState=case Prof of 
 		 undefined -> 
-		     #class{prof=B, students=S};
+		     #class{prof=WebSocketId, students=Students};
 		 _ ->
-		     #class{prof=V, students=dict:store(B,C,S)}
+		     #class{prof=Prof, students=dict:store(WebSocketId,SessionId,Students)}
 	     end,
     {reply, ok, NewState};
 %%--------------------------------------------------------------------
@@ -70,9 +70,9 @@ handle_call({join_service, _A,B,C}, _From, State) ->
 %%--------------------------------------------------------------------
 %% to handle a close connection to you service
 %%--------------------------------------------------------------------
-handle_call({terminate_service, A, _B}, _From, State) ->
-    #class{prof=V, students=S} = State,
-    {reply, ok, #class{prof=V, students=dict:erase(A,S)}};
+handle_call({terminate_service, WebSocketId, _SessionId}, _From, State) ->
+    #class{prof=Prof, students=Students} = State,
+    {reply, ok, #class{prof=Prof, students=dict:erase(WebSocketId,Students)}};
 %%--------------------------------------------------------------------
 
 handle_call(_Request, _From, State) ->
@@ -102,6 +102,7 @@ handle_info(_Info, State) ->
   {noreply, State}.
 
 terminate(_Reason, _State) ->
+   %call boss_service:unregister(?SERVER),
   ok.
 
 code_change(_OldVsn, State, _Extra) ->
