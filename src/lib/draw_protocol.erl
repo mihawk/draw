@@ -20,7 +20,7 @@
 
 -define(SERVER, ?MODULE).
 
--record(class,{prof, students}).
+-record(state,{users}).
 
 %% API
 -export([start_link/0, incoming/4, join/3, close/2]).
@@ -50,20 +50,15 @@ close(WebSocketId,SessionId) ->
 init([]) ->
   process_flag(trap_exit, true),
   io:format("~p (~p) starting...~n", [?MODULE, self()]),
-  {ok, #class{prof=undefined, students=dict:new()}}.
+  {ok, #state{users=dict:new()}}.
+  %% {ok, #class{prof=undefined, students=dict:new()}}.
 
 %%--------------------------------------------------------------------
 %% to handle a connection to your service
 %%--------------------------------------------------------------------
 handle_call({join_service, _ServiceName,WebSocketId, SessionId}, _From, State) ->
-    #class{prof=Prof, students=Students} = State,
-    NewState=case Prof of 
-		 undefined -> 
-		     #class{prof=WebSocketId, students=Students};
-		 _ ->
-		     #class{prof=Prof, students=dict:store(WebSocketId,SessionId,Students)}
-	     end,
-    {reply, ok, NewState};
+    #state{users=Users} = State,
+    {reply, ok, #state{users=dict:store(WebSocketId,SessionId,Users)}};
 %%--------------------------------------------------------------------
 
 
@@ -71,13 +66,9 @@ handle_call({join_service, _ServiceName,WebSocketId, SessionId}, _From, State) -
 %% to handle a close connection to you service
 %%--------------------------------------------------------------------
 handle_call({terminate_service, WebSocketId, _SessionId}, _From, State) ->
-    #class{prof=Prof, students=Students} = State,
-    case Prof =:= WebSocketId of
-	true ->
-	    {reply, ok, #class{prof=undefined, students=Students}};
-	false ->
-	    {reply, ok, #class{prof=Prof, students=dict:erase(WebSocketId,Students)}}
-    end;
+    #state{users=Users} = State,
+    {reply, ok, #state{users=dict:erase(WebSocketId,Users)}};
+
 %%--------------------------------------------------------------------
 
 handle_call(_Request, _From, State) ->
@@ -88,15 +79,11 @@ handle_call(_Request, _From, State) ->
 %% here is simple copy to all
 %%--------------------------------------------------------------------
 handle_cast({incoming_msg, _ServiceName, WebSocketId,_SessionId, Msg}, State) ->
-    #class{prof=Chef, students=Students} = State,
-    case WebSocketId =:= Chef of
-	false -> 
-	    false;
-	true ->
+    #state{users=Users} = State,
 	    Fun = fun(X) when is_pid(X)-> X ! {text, Msg} end,
-	    All = dict:fetch_keys(Students),
-	    [Fun(E) || E <- All]
-    end,
+	    All = dict:fetch_keys(Users),
+	    [Fun(E) || E <- All, E /= WebSocketId],
+    %% end,
     {noreply, State};
 %%--------------------------------------------------------------------
 
