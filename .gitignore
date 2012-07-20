@@ -1,0 +1,9 @@
+ebin/*.beam
+ebin/boss.app
+log/*
+deps
+erl_crash.dump
+*~
+#*#
+.*#
+*#

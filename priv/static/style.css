@@ -1,0 +1,113 @@
+body, ul{
+    margin: 0;
+    padding: 0;
+}
+body, canvas {
+            margin: 0;
+            padding: 0;
+            border: 0;
+            font-size: 100%;
+            font: inherit;
+            vertical-align: baseline;
+}
+#wrapper{
+    margin: 0 auto;
+    width: 100%;
+    height: 100%;
+}
+
+#canvas{ 
+    cursor: crosshair;
+    position: absolute;
+    z-index: 2;
+}
+#remotecanvas {
+    position: absolute;
+    z-index: 1;
+}
+.menu ul {
+    background: none repeat scroll 0 0 #333333;
+    height: 2em;
+    list-style: none outside none;
+    padding : 0;
+}
+.menu li {
+    float: left;
+    padding:0;
+    border-right: 1px solid #cccccc;
+}
+
+.menu label {
+    line-height: 2em;
+    color: #CCCCCC;
+    text-align: center;
+    text-decoration: none;
+    padding: 1em;
+}
+
+.menu input {
+    width:3em;
+}
+.menu li a:hover {
+    background-color: #CCCCC4;
+    color: #333333;
+    cursor: pointer;
+}
+
+
+.menu li a {
+    line-height: 2em;
+    color: #CCCCCC;
+    padding: 1em 1.5em;
+    text-align: center;
+    text-decoration: none;
+}
+.menu:after{
+    clear:both;
+}
+
+/*submenu*/
+.menu li ul{
+    background:none;
+    display:none;
+    height:auto;
+    padding:0;
+    position:absolute;
+    z-index:3;
+}
+
+.menu li ul li{
+    background:#333333;
+  border: none;
+}
+.menu li:hover ul{
+    display:block;
+}
+.menu li li {
+    display:block;
+    height:2em;
+    float:none;
+    margin:0;
+    padding:0;
+}
+.menu li:hover li a{
+    background:none;
+    line-height: 2em;
+    color: #CCCCCC;
+    padding: 0 1.5em;
+}
+.menu li ul a{
+    display:block;
+    height:2em;
+    font-style:normal;
+    margin:0;
+    padding: 0;
+    text-align:left;
+}
+.menu li ul a:hover, .menu li ul li:hover a{
+
+    background-color: #CCCCC4;
+    color: #333333;
+    border:0;
+    text-decoration:none;
+} 
