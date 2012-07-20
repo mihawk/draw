@@ -1,5 +1,5 @@
-draw is a demo to illustrate websocket protocole
-================================================
+draw is a websocket demo protocole with ChicaoBoss
+==================================================
 
 open whiteboard is a drawing websocket javascript application,
 you can find more information on the given link. 
