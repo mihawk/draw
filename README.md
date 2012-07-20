@@ -1,7 +1,10 @@
-draw is a websocket demo protocole with ChicagoBoss
-===================================================
+Draw is a demo of the websocket protocol in ChicagoBoss
+=======================================================
 
-open whiteboard is a drawing websocket javascript application,
+Background
+----------
+
+`open whiteboard` is a drawing websocket javascript application,
 you can find more information on the given link. 
 
     https://developer.mozilla.org/fr/demosdetail/open-whiteboard
@@ -10,7 +13,7 @@ you can find more information on the given link.
 Quickstart
 ----------
 
-get ChicagoBoss first
+Get ChicagoBoss
 
     git clone http://github.com/mihawk/ChicagoBoss.git
     cd ChicagoBoss 
@@ -25,11 +28,14 @@ Get draw
     make
     make start
 
-Open http://localhost:8001/draw in your browser, 
-open a second web browser on the same url, or more
-on the first browser, start to draw. :) 
+Open `http://localhost:8001/draw` in your browser, 
+open a second web browser on the same url, or a tab
+in the first browser then start to draw. :) 
 
-behind the scene you shoul look to:
+Digging in
+----------
+
+Behind the scenes, you should look at:
 
     src/lib/draw_protocol.erl
     priv/init/draw_02_draw_protocol.erl
