@@ -26,7 +26,7 @@ Get draw
     make start
 
 Open http://localhost:8001/draw in your browser, 
-open a second webrowser on the same url, or more
+open a second web browser on the same url, or more
 on the first browser, start to draw. :) 
 
 behind the scene you shoul look to:

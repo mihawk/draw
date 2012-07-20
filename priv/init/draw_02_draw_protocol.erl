@@ -1,4 +1,4 @@
--module(draw_01_draw_protocol).
+-module(draw_02_draw_protocol).
 
 -export([init/0, stop/1]).
 
