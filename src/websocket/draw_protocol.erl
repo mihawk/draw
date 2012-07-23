@@ -16,30 +16,18 @@
 %%% Created : 18 Jul 2012 by mihawk <chan.sisowath@mgmail.com>
 %%%-------------------------------------------------------------------
 -module(draw_protocol).
--behaviour(gen_server).
-
--define(SERVER, ?MODULE).
+-behaviour(boss_service_handler).
 
 -record(state,{users}).
 
 %% API
--export([start_link/0, incoming/4, join/3, close/2]).
+-export([init/0, 
+	handle_incoming/5, 
+	handle_join/4, 
+	handle_close/4, 
+	handle_info/2,
+	terminate/2]).
 
-%% gen_server callbacks
--export([init/1, handle_call/3, handle_cast/2, handle_info/2,
-	 terminate/2, code_change/3]).
-
-%% Client API
-start_link() ->
-  gen_server:start_link({local, ?SERVER}, ?MODULE, [], []).
-incoming(ServiceName, WebSocketId, SessionId, Msg) ->
-  gen_server:cast(?SERVER, {incoming_msg, ServiceName, WebSocketId, SessionId, Msg}).
-join(ServiceName, WebSocketId, SessionId) ->
-  gen_server:call(?SERVER, {join_service, ServiceName, WebSocketId, SessionId }).
-close(WebSocketId,SessionId) ->
-  gen_server:call(?SERVER, {terminate_service, WebSocketId, SessionId}).
-
-%% gen_server callbacks
 %%--------------------------------------------------------------------
 %% Function: init(Args) -> {ok, State} |
 %%                         {ok, State, Timeout} |
@@ -47,48 +35,53 @@ close(WebSocketId,SessionId) ->
 %%                         {stop, Reason}
 %% Description: Initiates the server
 %%--------------------------------------------------------------------
-init([]) ->
-  process_flag(trap_exit, true),
+init() ->
   io:format("~p (~p) starting...~n", [?MODULE, self()]),
+  %timer:send_interval(1000, ping),
   {ok, #state{users=dict:new()}}.
-  %% {ok, #class{prof=undefined, students=dict:new()}}.
 
 %%--------------------------------------------------------------------
 %% to handle a connection to your service
 %%--------------------------------------------------------------------
-handle_call({join_service, _ServiceName,WebSocketId, SessionId}, _From, State) ->
+handle_join(_ServiceName, WebSocketId, SessionId, State) ->
     #state{users=Users} = State,
-    {reply, ok, #state{users=dict:store(WebSocketId,SessionId,Users)}};
+    {reply, ok, #state{users=dict:store(WebSocketId,SessionId,Users)}}.
 %%--------------------------------------------------------------------
 
 
 %%--------------------------------------------------------------------
 %% to handle a close connection to you service
 %%--------------------------------------------------------------------
-handle_call({terminate_service, WebSocketId, _SessionId}, _From, State) ->
+handle_close(ServiceName, WebSocketId, _SessionId, State) ->
     #state{users=Users} = State,
-    {reply, ok, #state{users=dict:erase(WebSocketId,Users)}};
-
+    {reply, ok, #state{users=dict:erase(WebSocketId,Users)}}.
 %%--------------------------------------------------------------------
 
-handle_call(_Request, _From, State) ->
-    {reply, ignored_message, State}.
 
 %%--------------------------------------------------------------------
 %% to handle incoming message to your service
 %% here is simple copy to all
 %%--------------------------------------------------------------------
-handle_cast({incoming_msg, _ServiceName, WebSocketId,_SessionId, Msg}, State) ->
+handle_incoming(_ServiceName, WebSocketId,_SessionId, Message, State) ->
     #state{users=Users} = State,
-	    Fun = fun(X) when is_pid(X)-> X ! {text, Msg} end,
+	    Fun = fun(X) when is_pid(X)-> X ! {text, Message} end,
 	    All = dict:fetch_keys(Users),
 	    [Fun(E) || E <- All, E /= WebSocketId],
     %% end,
-    {noreply, State};
+    {noreply, State}.
 %%--------------------------------------------------------------------
 
-handle_cast(_Msg, State) ->
-  {noreply, State}.
+
+handle_info(ping, State) ->
+	error_logger:info_msg("pong:~p~n", [now()]),
+	{noreply, State};
+
+handle_info(tic_tac, State) ->
+    #state{users=Users} = State,
+	    Fun = fun(X) when is_pid(X)-> X ! {text, "tic tac"} end,
+	    All = dict:fetch_keys(Users),
+	    [Fun(E) || E <- All],
+  {noreply, State};
 
 handle_info(_Info, State) ->
   {noreply, State}.
@@ -96,8 +89,5 @@ handle_info(_Info, State) ->
 terminate(_Reason, _State) ->
    %call boss_service:unregister(?SERVER),
   ok.
-
-code_change(_OldVsn, State, _Extra) ->
-  {ok, State}.
 
 %% Internal functions

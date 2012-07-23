@@ -37,8 +37,8 @@ Digging in
 
 Behind the scenes, you should look at:
 
-    src/lib/draw_protocol.erl
-    priv/init/draw_02_draw_protocol.erl
+    boss.config
+    priv/src/websocket/draw_protocol.erl
 
 
 
