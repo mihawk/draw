@@ -15,7 +15,7 @@
 %%% @end
 %%% Created : 18 Jul 2012 by mihawk <chan.sisowath@mgmail.com>
 %%%-------------------------------------------------------------------
--module(draw_protocol).
+-module(draw_draw_protocol_websocket).
 -behaviour(boss_service_handler).
 
 -record(state,{users}).
@@ -76,11 +76,10 @@ handle_info(ping, State) ->
 	error_logger:info_msg("pong:~p~n", [now()]),
 	{noreply, State};
 
-handle_info(tic_tac, State) ->
+handle_info(state, State) ->
     #state{users=Users} = State,
-	    Fun = fun(X) when is_pid(X)-> X ! {text, "tic tac"} end,
-	    All = dict:fetch_keys(Users),
-	    [Fun(E) || E <- All],
+	All = dict:fetch_keys(Users),
+	error_logger:info_msg("state:~p~n", [All]),
   {noreply, State};
 
 handle_info(_Info, State) ->
