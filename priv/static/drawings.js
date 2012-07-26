@@ -8,7 +8,7 @@ $(document).ready(function() {
         $cvs = $("#canvas"),
         top = $cvs.offset().top,
         left = $cvs.offset().left,
-        wsc = new WebSocket("ws://localhost:8001/draw_protocol", "draw_protocol"),
+        wsc = new WebSocket("ws://localhost:8001/draw/websocket/draw_protocol", "draw_protocol"),
         mySocketId = -1;
 
 
