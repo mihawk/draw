@@ -53,22 +53,20 @@ command:
 
 >make dist
 
-.
-├── apps            <----- boss app folder
-│   ├── cb_admin
-│   └── draw
-├── bin             <----- all your deps
-│   └── rebar
-├── deps
-│   ├── boss 
-│   └── .... 
-├── ebin
-├── Makefile
-├── rebar
-├── rebar.cmd
-├── rebar.config    <----- boss as deps and add yours
-└── rel
-    ├── files
-    ├── reltool.config
-    └── vars.config
+	.
+	├── apps            <----- boss app folder
+	│   ├── cb_admin
+	│   └── draw
+	├── deps            <----- all yours deps
+	│   ├── boss 
+	│   └── .... 
+	├── ebin
+	├── Makefile
+	├── rebar
+	├── rebar.cmd
+	├── rebar.config    <----- boss as deps and add yours
+	└── rel
+	    ├── files
+	    ├── reltool.config
+	    └── vars.config
 
