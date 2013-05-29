@@ -52,7 +52,7 @@ command:
 
 
 >make dist
-
+```bash
 	.
 	├── apps            <----- boss app folder
 	│   ├── cb_admin
@@ -69,4 +69,4 @@ command:
 	    ├── files
 	    ├── reltool.config
 	    └── vars.config
-
+```
