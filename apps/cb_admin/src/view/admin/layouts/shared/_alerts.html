@@ -1,0 +1,10 @@
+{% if boss_flash %}
+{% for flash in boss_flash %}
+<div class="flash {{ flash.method }}">
+	{{ flash.title }}
+	{% if flash.message %}
+	<br>{{ flash.message }}
+	{% endif %}
+</div>
+{% endfor %}
+{% endif %}

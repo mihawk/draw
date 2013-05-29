@@ -1,0 +1,27 @@
+{% extends "admin/layouts/admin.html" %}
+{% block title %}Chicago Boss Hot Code Upgrade{% endblock %}
+
+{% block body %}
+<h1>Chicago Boss Hot Code Upgrade</h1>
+<form method="post" action="{% url action="upgrade" %}" class="tabular">
+<div class="box">
+	<div id="issue_descr_fields">
+	<p>
+		<label for="issue_tracker_id">Upgrade BEAM code</label>
+		<input type="submit" value="Now" />
+	</p>
+	</div>
+</div>
+</form>
+
+<form method="post" action="{% url action="reread_init_scripts" %}" class="tabular">
+<div class="box">
+	<div id="issue_descr_fields">
+	<p>
+		<label for="issue_tracker_id">Reload init scripts</label>
+		<input type="submit" value="Now" />
+	</p>
+	</div>
+</div>
+</form>
+{% endblock %}

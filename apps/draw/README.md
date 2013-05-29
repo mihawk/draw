@@ -41,34 +41,7 @@ Behind the scenes, you should look at:
     priv/src/websocket/draw_protocol.erl
 
 
-i just add release to draw application,  
- follow this structure to be abble to do a release of your project.
 
-update the reltool.config according to your application 
+    
 
-command:
-
->make rel
-
-
->make dist
-
-.
-├── apps            <----- boss app folder
-│   ├── cb_admin
-│   └── draw
-├── bin             <----- all your deps
-│   └── rebar
-├── deps
-│   ├── boss 
-│   └── .... 
-├── ebin
-├── Makefile
-├── rebar
-├── rebar.cmd
-├── rebar.config    <----- boss as deps and add yours
-└── rel
-    ├── files
-    ├── reltool.config
-    └── vars.config
 

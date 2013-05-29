@@ -1,26 +1,41 @@
-REBAR = $(shell pwd)/rebar
+REBAR := ./rebar
+DIALYZER := dialyzer
+DIALYZER_APPS := kernel stdlib sasl inets crypto public_key ssl
+ERL_LIBS=deps
+APP := draw 
 
-.PHONY: 
+.PHONY: deps test rel
 
-all: compile
+all: app
 
-compile:
-	$(REBAR) boss c=compile
+app: deps
+	@env ERL_LIBS=$(ERL_LIBS) $(REBAR) compile
 
-clean:
-	$(REBAR) clean
+deps:  $(REBAR)
+	@$(REBAR) get-deps
 
-start:
-	./init-dev.sh
+clean:  $(REBAR)
+	@$(REBAR) clean
 
+rel: app
+	@cd rel && ../$(REBAR) generate
 
-draw: all
+dist: rel
+	@mkdir -p dist && tar -zcf dist/$(APP).tar.gz -C rel $(APP)
 
+test: $(REBAR) app
+	@$(REBAR) eunit skip_deps=true suites=$(SUITE)
 
+ct: $(REBAR)
+	@$(REBAR) ct skip_deps=true
 
-###
-### Docs
-###
-docs:
-	@$(REBAR) skip_deps=true doc
+build-plt:
+	@$(DIALYZER) --build_plt --output_plt .draw_dialyzer.plt --apps $(DIALYZER_APPS)
+
+dialyze:
+	@$(DIALYZER) --src src --plt .draw_dialyzer.plt -Werror_handling \
+		-Wrace_conditions -Wunmatched_returns # -Wunderspecs
+
+docs: $(REBAR)
+	./deps/edown/edown_make -config priv/edown.config -pa deps/edown/ebin
 
