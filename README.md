@@ -47,9 +47,12 @@ i just add release to draw application,
 update the reltool.config according to your application 
 
 command:
+```bash
 
 >make rel
 >make dist
+
+```
 
 ```bash
 
