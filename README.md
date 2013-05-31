@@ -49,24 +49,32 @@ update the reltool.config according to your application
 command:
 
 >make rel
-
-
 >make dist
+
 ```bash
-	.
-	├── apps            <----- boss app folder
-	│   ├── cb_admin
-	│   └── draw
-	├── deps            <----- all yours deps
-	│   ├── boss 
-	│   └── .... 
-	├── ebin
-	├── Makefile
-	├── rebar
-	├── rebar.cmd
-	├── rebar.config    <----- boss as deps and add yours
-	└── rel
-	    ├── files
-	    ├── reltool.config
-	    └── vars.config
+
+.
+├── apps             <----- boss app folder
+│   ├── cb_admin
+│   └── draw
+├── deps
+│   ├── boss         <----- all yours deps boss ... and yours
+│   └── ...
+├── dist
+│   └── draw.tar.gz  <----- your tarball
+├── Makefile
+├── rebar
+├── rebar.config
+└── rel
+    ├── files  
+    │   ├── draw
+    │   ├── draw.cmd
+    │   ├── erl
+    │   ├── install_upgrade.escript
+    │   ├── nodetool
+    │   ├── start_erl.cmd
+    │   ├── sys.config
+    │   └── vm.args
+    ├── reltool.config
+    └── vars.config
 ```
