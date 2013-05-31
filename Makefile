@@ -3,6 +3,7 @@ DIALYZER := dialyzer
 DIALYZER_APPS := kernel stdlib sasl inets crypto public_key ssl
 ERL_LIBS=deps
 APP := draw 
+APPTGZ := draw.tar.gz
 
 .PHONY: deps test rel
 
@@ -21,7 +22,7 @@ rel: app
 	@cd rel && ../$(REBAR) generate
 
 dist: rel
-	@mkdir -p dist && tar -zcf dist/$(APP).tar.gz -C rel $(APP)
+	@mkdir -p dist && tar -zcf dist/$(APPTGZ) -C rel $(APP)
 
 test: $(REBAR) app
 	@$(REBAR) eunit skip_deps=true suites=$(SUITE)
