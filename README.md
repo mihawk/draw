@@ -52,9 +52,9 @@ Digging in
 
 Behind the scenes, you should look at:
 
-    draw/apps/draw/priv/static/    
-    draw/apps/draw/src/websocket/draw_draw_protocol_websocket.erl
-
+    
+    [drawing.js](https://github.com/mihawk/draw/blob/master/apps/draw/priv/static/drawings.js#L11)
+    [draw_draw_protocol_websocket.erl](https://github.com/mihawk/draw/blob/master/apps/draw/src/websocket/draw_draw_protocol_websocket.erl)
 
 Application directory canva
 ---------------------------
