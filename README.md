@@ -10,23 +10,32 @@ you can find more information on the given link.
     https://developer.mozilla.org/fr/demosdetail/open-whiteboard
 
 
+draw come as an otp application
+
 Quickstart
 ----------
 
-Get ChicagoBoss
+Get draw
 
-    git clone http://github.com/mihawk/ChicagoBoss.git
-    cd ChicagoBoss 
-    make
-    cd ..
+    $>git clone http://github.com/mihawk/draw.git
+    $>cd draw
+    $>make rel
     
+Start Draw
+```bash
     
-Get draw 
+    $>cd draw
+    $>rel/draw/bin/draw start
+
+```
+    or get a console to see log :)
+
+```bash
+
+    $>rel/draw/bin/draw console     
+
+```
     
-    git clone http://github.com/mihawk/draw.git
-    cd draw
-    make
-    make start
 
 Open `http://localhost:8001/draw` in your browser, 
 open a second web browser on the same url, or a tab
@@ -37,47 +46,39 @@ Digging in
 
 Behind the scenes, you should look at:
 
-    boss.config
-    priv/src/websocket/draw_protocol.erl
+    
+    draw/apps/draw/src/websocket/draw_draw_protocol_websocket.erl
 
 
-i just add release to draw application,  
- follow this structure to be abble to do a release of your project.
+Application directory canva
+---------------------------
 
-update the reltool.config according to your application 
 
-command:
-```bash
+```sh
 
->make rel
->make dist
+    .
+    ├── apps                   <----- boss app folder
+    │   ├── cb_admin
+    │   └── draw
+    ├── deps
+    │   ├── boss               <----- all yours deps boss ... and yours
+    │   └── ...
+    ├── dist
+    │   └── draw-<tag>.tar.gz  <----- your tarball
+    ├── Makefile
+    ├── rebar
+    ├── rebar.config
+    └── rel
+        ├── files  
+        │   ├── draw
+        │   ├── draw.cmd
+        │   ├── erl
+        │   ├── install_upgrade.escript
+        │   ├── nodetool
+        │   ├── start_erl.cmd
+        │   ├── sys.config
+        │   └── vm.args
+        ├── reltool.config
+        └── vars.config
 
-```
-
-```bash
-
-.
-├── apps             <----- boss app folder
-│   ├── cb_admin
-│   └── draw
-├── deps
-│   ├── boss         <----- all yours deps boss ... and yours
-│   └── ...
-├── dist
-│   └── draw.tar.gz  <----- your tarball
-├── Makefile
-├── rebar
-├── rebar.config
-└── rel
-    ├── files  
-    │   ├── draw
-    │   ├── draw.cmd
-    │   ├── erl
-    │   ├── install_upgrade.escript
-    │   ├── nodetool
-    │   ├── start_erl.cmd
-    │   ├── sys.config
-    │   └── vm.args
-    ├── reltool.config
-    └── vars.config
 ```
