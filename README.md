@@ -17,22 +17,25 @@ Quickstart
 
 Get draw
 
-    $>git clone http://github.com/mihawk/draw.git
-    $>cd draw
-    $>make rel
+```sh
+    >git clone http://github.com/mihawk/draw.git
+    >cd draw
+    >make rel
+```
     
 Start Draw
-```bash
+
+```sh
     
-    $>cd draw
-    $>rel/draw/bin/draw start
+    >cd draw
+    >rel/draw/bin/draw start
 
 ```
     or get a console to see log :)
 
 ```bash
 
-    $>rel/draw/bin/draw console     
+    >rel/draw/bin/draw console     
 
 ```
     
@@ -41,12 +44,15 @@ Open `http://localhost:8001/draw` in your browser,
 open a second web browser on the same url, or a tab
 in the first browser then start to draw. :) 
 
+draw is shipped with cb_admin, `http://localhost:8001/admin`
+
+
 Digging in
 ----------
 
 Behind the scenes, you should look at:
 
-    
+    draw/apps/draw/priv/static/    
     draw/apps/draw/src/websocket/draw_draw_protocol_websocket.erl
 
 
