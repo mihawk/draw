@@ -24,7 +24,7 @@
 -export([init/0, 
 	handle_incoming/5, 
 	handle_join/4, 
-	handle_close/4, 
+	handle_close/5, 
 	handle_info/2,
 	terminate/2]).
 
@@ -52,8 +52,9 @@ handle_join(_ServiceName, WebSocketId, SessionId, State) ->
 %%--------------------------------------------------------------------
 %% to handle a close connection to you service
 %%--------------------------------------------------------------------
-handle_close(ServiceName, WebSocketId, _SessionId, State) ->
+handle_close(Reason, ServiceName, WebSocketId, _SessionId, State) ->
     #state{users=Users} = State,
+    io:format("Websocket close for reason ~p~n", [Reason]),
     {reply, ok, #state{users=dict:erase(WebSocketId,Users)}}.
 %%--------------------------------------------------------------------
 
