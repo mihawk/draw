@@ -8,29 +8,41 @@
 %%% @end
 %%% Created : 18 Jul 2012 by mihawk <chan.sisowath@mgmail.com>
 %%%-------------------------------------------------------------------
--module(draw_websocket_test_websocket).
+-module(draw_websocket_test_websocket, [Req, SessionId]).
 -behaviour(boss_service_handler).
 
 -record(state,{users}).
 
 %% API
--export([init/0, handle_incoming/5, handle_join/4, handle_close/4, handle_info/2, terminate/2]).
+-export([init/0, 
+	handle_incoming/4, 
+	handle_join/3,
+        handle_broadcast/2,
+	handle_close/4, 
+	handle_info/2,
+	terminate/2]).
 
 init() ->
   io:format("~p (~p) starting...~n", [?MODULE, self()]),
   %timer:send_interval(1000, ping),
   {ok, #state{users=dict:new()}}.
 
-handle_join(_ServiceName, WebSocketId, SessionId, State) ->
+handle_join(_ServiceName, WebSocketId, State) ->
     #state{users=Users} = State,
-    {reply, ok, #state{users=dict:store(WebSocketId,SessionId,Users)}}.
+    {noreply, #state{users=dict:store(WebSocketId,SessionId,Users)}}.
 
 
-handle_close(ServiceName, WebSocketId, _SessionId, State) ->
+handle_close(Reason, ServiceName, WebSocketId, State) ->
     #state{users=Users} = State,
-    {reply, ok, #state{users=dict:erase(WebSocketId,Users)}}.
+    io:format("ServiceName ~p, WebSocketId ~p, SessiondId ~p, close for Reason ~p~n",
+              [ServiceName, WebSocketId, SessionId, Reason]),
+    {noreply, #state{users=dict:erase(WebSocketId, Users)}}.
 
-handle_incoming(_ServiceName, WebSocketId,_SessionId, Message, State) ->
+handle_broadcast(Message, State) ->
+  io:format("Broadcast Message ~p~n",[Message]),
+  {noreply, State}.
+
+handle_incoming(_ServiceName, WebSocketId, Message, State) ->
     #state{users=Users} = State,
 	    Fun = fun(X) when is_pid(X)-> X ! {text, Message} end,
 	    All = dict:fetch_keys(Users),

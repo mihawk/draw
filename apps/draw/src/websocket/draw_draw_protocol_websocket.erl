@@ -15,15 +15,16 @@
 %%% @end
 %%% Created : 18 Jul 2012 by mihawk <chan.sisowath@mgmail.com>
 %%%-------------------------------------------------------------------
--module(draw_draw_protocol_websocket).
+-module(draw_draw_protocol_websocket, [Req, SessionId]).
 -behaviour(boss_service_handler).
 
 -record(state,{users}).
 
 %% API
 -export([init/0, 
-	handle_incoming/5, 
-	handle_join/4, 
+	handle_incoming/4, 
+	handle_join/3,
+        handle_broadcast/2,
 	handle_close/4, 
 	handle_info/2,
 	terminate/2]).
@@ -43,26 +44,31 @@ init() ->
 %%--------------------------------------------------------------------
 %% to handle a connection to your service
 %%--------------------------------------------------------------------
-handle_join(_ServiceName, WebSocketId, SessionId, State) ->
+handle_join(_ServiceName, WebSocketPid, State) ->
     #state{users=Users} = State,
-    {reply, ok, #state{users=dict:store(WebSocketId,SessionId,Users)}}.
+    {noreply, #state{users=dict:store(WebSocketPid, SessionId ,Users)}}.
 %%--------------------------------------------------------------------
 
 
 %%--------------------------------------------------------------------
 %% to handle a close connection to you service
 %%--------------------------------------------------------------------
-handle_close(ServiceName, WebSocketId, _SessionId, State) ->
+handle_close(Reason, ServiceName, WebSocketId, State) ->
     #state{users=Users} = State,
-    {reply, ok, #state{users=dict:erase(WebSocketId,Users)}}.
+    io:format("Service ~p, WsPid ~p close for Reason ~p~n",
+              [ServiceName, WebSocketId, Reason]),
+    {noreply, #state{users=dict:erase(WebSocketId,Users)}}.
 %%--------------------------------------------------------------------
 
+handle_broadcast(Message, State) ->
+  io:format("Broadcast Message ~p~n",[Message]),
+  {noreply, State}.
 
 %%--------------------------------------------------------------------
 %% to handle incoming message to your service
 %% here is simple copy to all
 %%--------------------------------------------------------------------
-handle_incoming(_ServiceName, WebSocketId,_SessionId, Message, State) ->
+handle_incoming(_ServiceName, WebSocketId, Message, State) ->
     #state{users=Users} = State,
 	    Fun = fun(X) when is_pid(X)-> X ! {text, Message} end,
 	    All = dict:fetch_keys(Users),

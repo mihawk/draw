@@ -61,20 +61,19 @@
 %%%
 %%% @end
 %%%-------------------------------------------------------------------
--module(draw_test_websocket).
+-module(draw_test_websocket, [Req, SessionId]).
 -behaviour(boss_service_handler).
 
 -record(state,{property1, property2}).
 
-%% API
--export([
-    init/0, 
-	handle_incoming/5, 
-	handle_join/4, 
+-export([init/0, 
+	handle_incoming/4, 
+	handle_join/3,
+        handle_broadcast/2,
 	handle_close/4, 
 	handle_info/2,
-	terminate/2
-    ]).
+	terminate/2]).
+
 
 %%--------------------------------------------------------------------
 -spec init() -> {ok, NewState::#state{}}.
@@ -92,7 +91,6 @@ init() ->
 -spec handle_join(
         ServiceURL::string(),
         WebSocket::pid(),
-        SessionId::string(),
         State::#state{}) -> 
     {reply, Reply, NewState::#state{}} |
     {reply, Reply, NewState::#state{}, Timeout} |
@@ -104,16 +102,16 @@ init() ->
 %% Handle a client joining this service.
 %% @end
 %%--------------------------------------------------------------------
-handle_join(ServiceName, WebSocketId, SessionId, State) ->
+handle_join(ServiceName, WebSocketId, State) ->
     error_logger:info_msg("(handle_join) ~p / ~p / ~p / ~p~n", [
             ServiceName, WebSocketId, SessionId, State]),
-    {reply, ok, State}.
+    {noreply, State}.
 
 %%--------------------------------------------------------------------
 -spec handle_close(
+        Reason::tuple(),
         ServiceURL::string(),
         WebSocket::pid(),
-        SessionId::string(),
         State::#state{}) -> 
     {reply, Reply, NewState::#state{}} |
     {reply, Reply, NewState::#state{}, Timeout} |
@@ -125,16 +123,20 @@ handle_join(ServiceName, WebSocketId, SessionId, State) ->
 %% Handle a client leaving this service.
 %% @end
 %%--------------------------------------------------------------------
-handle_close(ServiceName, WebSocketId, SessionId, State) ->
-    error_logger:info_msg("(handle_close) ~p / ~p / ~p / ~p~n", [
-            ServiceName, WebSocketId, SessionId, State]),
-    {reply, ok, State}.
+handle_close(Reason, ServiceName, WebSocketId, State) ->
+    error_logger:info_msg("(handle_close) ~p / ~p / ~p / ~p / ~p~n", [
+            Reason, ServiceName, WebSocketId, SessionId, State]),
+    {noreply, State}.
+
+
+handle_broadcast(Message, State) ->
+  io:format("Broadcast Message ~p~n",[Message]),
+  {noreply, State}.
 
 %%--------------------------------------------------------------------
 -spec handle_incoming(
         ServiceURL::string(),
         WebSocket::pid(),
-        SessionId::string(),
         Message::string(),
         State::#state{}) ->
     {noreply, NewState::#state{}} |
@@ -151,7 +153,7 @@ handle_close(ServiceName, WebSocketId, SessionId, State) ->
 %% to format complex data message content.
 %% @end
 %%--------------------------------------------------------------------
-handle_incoming(ServiceName, WebSocketId, SessionId, Message, State) ->
+handle_incoming(ServiceName, WebSocketId, Message, State) ->
     error_logger:info_msg("(handle_incoming) ~p / ~p / ~p / ~p / ~p~n", [
             ServiceName, WebSocketId, SessionId, Message, State]),
     {noreply, State}.
