@@ -27,7 +27,8 @@ init() ->
   %timer:send_interval(1000, ping),
   {ok, #state{users=dict:new()}}.
 
-handle_join(_ServiceName, WebSocketId, State) ->
+handle_join(ServiceName, WebSocketId, State) ->
+    error_logger:info_msg("~p ~p ~p", [ServiceName, WebSocketId, SessionId]),
     #state{users=Users} = State,
     {noreply, #state{users=dict:store(WebSocketId,SessionId,Users)}}.
 
@@ -43,10 +44,7 @@ handle_broadcast(Message, State) ->
   {noreply, State}.
 
 handle_incoming(_ServiceName, WebSocketId, Message, State) ->
-    #state{users=Users} = State,
-	    Fun = fun(X) when is_pid(X)-> X ! {text, Message} end,
-	    All = dict:fetch_keys(Users),
-	    [Fun(E) || E <- All, E /= WebSocketId],
+     WebSocketId ! {text, << "That's what she said! ", Message/binary >>},
     {noreply, State}.
 
 handle_info(state, State) ->
