@@ -63,14 +63,14 @@ Application directory canva
 ```sh
 
     .
-    ├── apps                   <----- boss app folder
+    ├── apps                       <----- boss app folder
     │   ├── cb_admin
     │   └── draw
     ├── deps
-    │   ├── boss               <----- all yours deps boss ... and yours
+    │   ├── boss                   <----- all yours deps boss ... and yours
     │   └── ...
     ├── dist
-    │   └── draw-<tag>.tar.gz  <----- your tarball
+    │   └── draw-<rel.vsn>.tar.gz  <----- your tarball
     ├── Makefile
     ├── rebar
     ├── rebar.config
