@@ -19,7 +19,7 @@ draw:
 app: deps cb_admin draw
 
 deps:  $(REBAR)
-	@$(REBAR) get-deps
+	@$(REBAR) get-deps compile
 
 clean:  $(REBAR)
 	@$(REBAR) clean
