@@ -12,6 +12,8 @@ you can find more information on the given link.
 
 draw come as an otp application
 
+see also [draw](http://github.com/naga-framework/draw) with naga 
+
 Quickstart
 ----------
 
